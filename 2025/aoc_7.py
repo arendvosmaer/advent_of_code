@@ -24,8 +24,6 @@ def count_paths(grid, source, cache={}):
 def propagate(
     grid: List[List[str]], beam: Tuple[int, int], cache={}
 ) -> List[List[str]]:
-    print_grid(grid, animate=True)
-
     key = str(beam)
     cached = cache.get(key)
     if cached:
@@ -43,6 +41,8 @@ def propagate(
         return grid
 
     grid[y][x] = "|"
+
+    print_grid(grid, x, y)
     cache[key] = grid
 
     if y >= len(grid) - 1:
@@ -61,12 +61,21 @@ def count_splits(grid: List[List[str]]) -> int:
     return cnt
 
 
-def print_grid(grid, animate=False):
-    if animate:
-        time.sleep(3 / len(grid) / len(grid[0]))
-        print("\033[2J\033[H", end="")  # Clear terminal and move cursor to top
+first = True
+
+
+def print_grid(grid, x, y):
+    global first
+    if not first:
+        # move cursor to updated field and only print new character "|"
+        print(f"\033[{y+1};{x+1}H|", end="", flush=True)
+        time.sleep(0.001)
+        return
+    first = False
+    print("\033[2J\033[H", end="")  # Clear screen and move to home
     for row in grid:
         print("".join(row))
+    print(flush=True)
 
 
 def part_1(grid):
