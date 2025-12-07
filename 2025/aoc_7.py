@@ -19,22 +19,27 @@ def part_2(grid):
     print(paths)
 
 
+cache = {}
+
+
 def count_paths(grid, source):
-    cnt = 0
-    sources = [source]
-    while sources:
-        x, y = sources.pop(0)
-        if y >= len(grid) - 1:
-            cnt += 1
-            continue
-        elif x < 0 or x >= len(grid[y]):
-            continue
-        elif grid[y][x] == "^":
-            sources.append((x - 1, y + 1))
-            sources.append((x + 1, y + 1))
-        else:
-            sources.append((x, y + 1))
-    return cnt
+    cached = cache.get(str(source))
+    if cached:
+        return cached
+    x, y = source
+    if y >= len(grid) - 1:
+        return 1
+    if x < 0 or x >= len(grid[y]):
+        return 0
+    if grid[y][x] == "^":
+        count = count_paths(grid, (x - 1, y + 1)) + count_paths(
+            grid, (x + 1, y + 1)
+        )
+        cache[str(source)] = count
+        return count
+    count = count_paths(grid, (x, y + 1))
+    cache[str(source)] = count
+    return count
 
 
 def propagate(grid: List[List[str]], beams: List[Tuple[int, int]]) -> List[List[str]]:
