@@ -5,6 +5,9 @@ import time
 sys.setrecursionlimit(100000)
 
 def part_1(grid):
+    grid = [[f for f in r] for r in grid]
+    source = (grid[0].index("S"), 1)
+    grid = propagate(grid, [source])
     print(count_splits(grid))
 
 
@@ -43,24 +46,23 @@ def print_grid(grid):
     for row in grid:
         print("".join(row))
 
-def count_splits(grid:List[List[str]])->int:
+
+def count_splits(grid: List[List[str]]) -> int:
     cnt = 0
     for y, row in enumerate(grid):
         for x, field in enumerate(row):
             if field == "^":
-                if grid[y-1][x] == "|":
-                    cnt +=1
+                if grid[y - 1][x] == "|":
+                    cnt += 1
     return cnt
 
 
 if __name__ == "__main__":
     with open("/Users/arend/git/advent_of_code/2025/aoc_7_input_example.txt", "r") as file:
         lines = file.read().strip().split("\n")
-    # lines = stdin.read().strip().split("\n")
+    lines = stdin.read().strip().split("\n")
     grid = [list(line) for line in lines]
-    source_x = grid[0].index("S")
-    grid = propagate(grid, [(source_x, 1)])
 
     part_1(grid)
 
-    part_2(lines)
+    part_2(grid)
