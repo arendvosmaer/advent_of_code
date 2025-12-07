@@ -1,21 +1,6 @@
 from sys import stdin
 
 
-def calc(columns):
-    gt = 0
-    for c in columns:
-        op = c[-1]
-        if op == "+":
-            for f in c[:-1]:
-                gt += int(f)
-        else:
-            p = 1
-            for f in c[:-1]:
-                p = p * int(f)
-            gt += p
-    return gt
-
-
 def part_1(lines):
     columns = []
     for l in lines:
@@ -30,9 +15,7 @@ def part_1(lines):
 
 
 def part_2(lines):
-    grid = [list(l) for l in lines]
-    spaces_to_add = len(grid[0]) - len(grid[-1])
-    grid[-1] += [" "] * spaces_to_add
+    grid = [list(l) for l in lines[:-1]]
 
     columns = [[]]
     column_index = 0
@@ -43,17 +26,11 @@ def part_2(lines):
             continue
         number = number_at(grid, idx)
         columns[column_index].append(number)
-    gt = 0
+
     for idx, operator in enumerate(lines[-1].split()):
-        if operator == "+":
-            for n in columns[idx]:
-                gt += n
-        else:
-            p = 1
-            for n in columns[idx]:
-                p *= n
-            gt += p
-    print(gt)
+        columns[idx].append(operator)
+
+    print(calc(columns))
 
 
 def is_separator(grid, idx):
@@ -65,7 +42,7 @@ def is_separator(grid, idx):
 
 def number_at(grid, idx):
     number = ""
-    for line in grid[:-1]:
+    for line in grid:
         number += line[idx]
     return int(number)
 
