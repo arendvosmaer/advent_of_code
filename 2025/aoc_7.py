@@ -40,9 +40,10 @@ def propagate(
     return propagate(grid, beams)
 
 
-def print_grid(grid):
-    time.sleep(10/len(grid)/len(grid[0]))
-    print("\033[2J\033[H", end="")  # Clear terminal and move cursor to top
+def print_grid(grid, animate=False):
+    if animate:
+        time.sleep(10 / len(grid) / len(grid[0]))
+        print("\033[2J\033[H", end="")  # Clear terminal and move cursor to top
     for row in grid:
         print("".join(row))
 
