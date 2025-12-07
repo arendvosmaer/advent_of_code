@@ -11,13 +11,31 @@ def part_1(grid):
     print(count_splits(grid))
 
 
-def part_2(lines):
-    pass
+def part_2(grid):
+    source = (grid[0].index("S"), 1)
+    paths = count_paths(grid, source)
+    print(paths)
 
 
-def propagate(
-    grid: List[List[str]], beams: List[Tuple[int, int]]
-) -> List[List[str]]:
+def count_paths(grid, source):
+    cnt = 0
+    sources = [source]
+    while sources:
+        x, y = sources.pop(0)
+        if y >= len(grid) - 1:
+            cnt += 1
+            continue
+        elif x < 0 or x >= len(grid[y]):
+            continue
+        elif grid[y][x] == "^":
+            sources.append((x - 1, y + 1))
+            sources.append((x + 1, y + 1))
+        else:
+            sources.append((x, y + 1))
+    return cnt
+
+
+def propagate(grid: List[List[str]], beams: List[Tuple[int, int]]) -> List[List[str]]:
     if not beams:
         return grid
     print_grid(grid)
